@@ -1,0 +1,29 @@
+# init module
+go mod init go-book-api
+
+# get sqlite driver
+go get github.com/mattn/go-sqlite3
+
+# run
+go run main.go
+
+# list books
+ curl http://localhost:8080/books
+
+# add book
+curl -X POST http://localhost:8080/books -d '{"title":"Go with SQLite","author":"You"}' -H "Content-Type: application/json" 
+
+# install goose
+go install github.com/pressly/goose/v3/cmd/goose@latest
+
+# add go do path
+export PATH="$PATH:$(go env GOPATH)/bin"
+
+# create migration file
+goose -dir db/migrations create create_books_table sql
+
+# create db
+sqlite3 books.db ""   # creates the file
+
+# run migration
+goose -dir db/migrations sqlite3 books.db up
